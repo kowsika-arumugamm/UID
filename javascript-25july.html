@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Student Details</h1>
+<p id="demo"></p>
+
+<script>
+class Student {
+  constructor(name, year, rollNo, address, mobileNo) {
+    this.name = name;
+    this.year = year;
+    this.rollNo = rollNo;
+    this.address = address;
+    this.mobileNo = mobileNo;
+  }
+
+  stud() {
+    const date = new Date();
+    return date.getFullYear() - this.year;
+  }
+}
+
+const myStudent = new Student("Kowsika A", 2005, "22ITR050", "6,Naduthottam,Uthukuli R.S", "9345435385");
+document.getElementById("demo").innerHTML =
+  "My name is " + myStudent.name + " and my roll number is " + myStudent.rollNo + ". I am " + myStudent.stud() + " years old." + 
+  "<br>Address: " + myStudent.address + 
+  "<br>Mobile No: " + myStudent.mobileNo;
+</script>
+
+</body>
+</html>

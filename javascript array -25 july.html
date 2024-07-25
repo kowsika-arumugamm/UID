@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Student Details</h1>
+<div id="demo"></div>
+
+<script>
+class Student {
+  constructor(name, year, rollNo, address, mobileNo) {
+    this.name = name;
+    this.year = year;
+    this.rollNo = rollNo;
+    this.address = address;
+    this.mobileNo = mobileNo;
+  }
+
+  stud = () => {
+    const date = new Date();
+    return date.getFullYear() - this.year;
+  }
+}
+
+const students = [
+  new Student("Kowsika A", 2005, "22ITR050", "6, Naduthottam, Uthukuli R.S", "9345435385"),
+  new Student("Krishna", 2006, "22ITR051", "10, East Street, Coimbatore", "9345435386"),
+  new Student("Krithick", 2004, "22ITR052", "20, West Road, Tirupur", "9345435387")
+];
+
+const demoElement = document.getElementById("demo");
+students.forEach(student => {
+  demoElement.innerHTML += 
+    "My name is " + student.name + " and my roll number is " + student.rollNo + ". I am " + student.stud() + " years old." + 
+    "<br>Address: " + student.address + 
+    "<br>Mobile No: " + student.mobileNo + 
+    "<hr>";
+});
+</script>
+
+</body>
+</html>
