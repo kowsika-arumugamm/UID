@@ -1,0 +1,14 @@
+{
+  "name": {
+    "type": "string",
+    "label": "name",
+    "placeholder": "Your name"
+  },
+  "age": {
+    "type": "number",
+    "label": "Your age"
+  },
+  "code": {
+    "type": "json"
+  }
+}

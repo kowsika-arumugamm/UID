@@ -1,0 +1,73 @@
+name: Release react-forms
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.2.0
+    - uses: coursier/cache-action@v5
+    #get version
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+    # install node 14
+    - name: setup node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+        registry-url: 'https://registry.npmjs.org'
+    # release
+    - uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: install
+      run: npm install
+    - name: build & publish
+      run: |
+        npm version ${{ steps.get_version.outputs.VERSION }} --no-git-tag-version
+        npm run build
+        npm publish --access public
+      env:
+          CI: true
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Commit files
+      run: |
+        git config --local user.email "github-actions@users.noreply.github.com"
+        git config --local user.name "github-actions"
+        git add --all
+        git commit -am "Update package version"
+    - name: Push
+      uses: ad-m/github-push-action@master
+      with:
+        branch: main
+        github_token: ${{ secrets.GITHUB_TOKEN}}
+    # create github release
+    - name: Create a Release
+      id: create_release
+      uses: actions/create-release@v1.1.4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: v${{ github.ref }}
+        draft: false
+
+    
+
+        
+  # close milestone (with the latest release found)
+    - name: Close milestone 
+      uses: adlerhsieh/prepare-release@0.1.2
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO_OWNER: ${{ github.repository_owner }}
+        REPO: react-forms
+        IGNORE_MILESTONE_NOT_FOUND: true
+  
